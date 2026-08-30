@@ -213,6 +213,18 @@ public class ItemArmor extends Item {
 	public static enum ArmorMaterial {
 		LEATHER("leather", 5, new int[] { 1, 3, 2, 1 }, 15), CHAIN("chainmail", 15, new int[] { 2, 5, 4, 1 }, 12),
 		IRON("iron", 15, new int[] { 2, 6, 5, 2 }, 9), GOLD("gold", 7, new int[] { 2, 5, 3, 1 }, 25),
+		SALLET("sallet", 15, new int[] { 3, 0, 0, 0 }, 9),
+        GOTHIC("gothic", 15, new int[] { 0, 8, 5, 2 }, 9),
+		GAMBESON_BOOTS("gambeson_boots", 15, new int[] { 0, 2, 0, 1 }, 9),
+		HALFARMOR("halfarmor", 15, new int[] { 2, 6, 0, 0 }, 9),
+		KNIGHT("knight", 15, new int[] { 0, 8, 5, 2 }, 9),
+		BARBUTE("barbute", 15, new int[] { 2, 0, 0, 0 }, 9),
+		SHISHAK("shishak", 15, new int[] { 2, 0, 0, 0 }, 9),
+		LAMELLAR("lamellar", 15, new int[] { 3, 6, 0, 2 }, 9),
+		BRIGANDINE("brigandine", 15, new int[] { 0, 5, 0, 0 }, 9),
+        CUIRASSIER("cuirassier", 15, new int[] { 2, 6, 1, 1 }, 9),
+		CRUSADER("crusader", 15, new int[] { 0, 6, 5, 1 }, 9),
+		GREATHELM("greathelm", 15, new int[] { 3, 0, 0, 0 }, 9),
 		DIAMOND("diamond", 33, new int[] { 3, 8, 6, 3 }, 10);
 
 		private final String name;
@@ -239,12 +251,27 @@ public class ItemArmor extends Item {
 			return this.enchantability;
 		}
 
-		public Item getRepairItem() {
-			return this == LEATHER ? Items.leather
-					: (this == CHAIN ? Items.iron_ingot
-							: (this == GOLD ? Items.gold_ingot
-									: (this == IRON ? Items.iron_ingot : (this == DIAMOND ? Items.diamond : null))));
-		}
+public Item getRepairItem() {
+    switch (this) {
+        case LEATHER: return Items.leather;
+        case CHAIN: return Items.iron_ingot;
+        case GOLD: return Items.gold_ingot;
+        case IRON: return Items.iron_ingot;
+        case DIAMOND: return Items.diamond;
+        case GAMBESON_BOOTS: return Items.leather;
+        case LAMELLAR: return Items.lamellar_rows;
+        case SHISHAK: return Items.iron_ingot;
+		case HALFARMOR: return Items.iron_ingot;
+        case BRIGANDINE: return Items.small_steel_plate;
+        case CUIRASSIER: return Items.steel_plate;
+		case CRUSADER: return Items.iron_ingot;
+		case BARBUTE: return Items.iron_ingot;
+		case SALLET: return Items.iron_ingot;
+		case GOTHIC: return Items.iron_ingot;
+		case GREATHELM: return Items.iron_ingot;
+        default: return null;
+    }
+}
 
 		public String getName() {
 			return this.name;

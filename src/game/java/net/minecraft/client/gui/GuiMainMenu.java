@@ -92,6 +92,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 	private static final ResourceLocation minecraftTitleBlurFlag = new ResourceLocation(
 			"textures/gui/title/background/enable_blur.txt");
 	private static final ResourceLocation eaglerGuiTextures = new ResourceLocation("eagler:gui/eagler_gui.png");
+	
+	private static final ResourceLocation overlayImageLocation = new ResourceLocation("textures/gui/title/overlay.png");
+
 	/**+
 	 * An array of all the paths to the panorama pictures.
 	 */
@@ -572,6 +575,19 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 			this.drawPanorama(i, j, f);
 		}
 		GlStateManager.enableAlpha();
+
+GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(overlayImageLocation);
+		
+		int overlayWidth = this.width;
+		int overlayHeight = this.height;
+		
+		int overlayX = 0;
+		int overlayY = 0;
+		
+		this.drawModalRectWithCustomSizedTexture(overlayX, overlayY, 0.0F, 0.0F, overlayWidth, overlayHeight, (float)overlayWidth, (float)overlayHeight);
+
+
 		short short1 = 274;
 		int k = this.width / 2 - short1 / 2;
 		byte b0 = 30;

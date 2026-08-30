@@ -1029,6 +1029,81 @@ public class Item {
 		registerItem(430, (String) "acacia_door", (new ItemDoor(Blocks.acacia_door)).setUnlocalizedName("doorAcacia"));
 		registerItem(431, (String) "dark_oak_door",
 				(new ItemDoor(Blocks.dark_oak_door)).setUnlocalizedName("doorDarkOak"));
+        registerItem(432, (String) "trumpet",
+                (new ItemTrumpet()).setUnlocalizedName("trumpet").setCreativeTab(CreativeTabs.tabMisc));
+registerItem(433, "steel_ingot",
+        (new Item()).setUnlocalizedName("steel_ingot").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(434, "leather_strip",
+        (new Item()).setUnlocalizedName("leather_strip").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(435, "hilt",
+        (new Item()).setUnlocalizedName("hilt").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(436, "steel_plate",
+        (new Item()).setUnlocalizedName("steel_plate").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(437, "steel_nugget",
+        (new Item()).setUnlocalizedName("steel_nugget").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(438, "steel_ring",
+        (new Item()).setUnlocalizedName("steel_ring").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(439, "steel_chain",
+        (new Item()).setUnlocalizedName("steel_chain").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(440, "steel_chainmail",
+        (new Item()).setUnlocalizedName("steel_chainmail").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(441, "woolen_fabric",
+        (new Item()).setUnlocalizedName("woolen_fabric").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(442, "pole",
+        (new Item()).setUnlocalizedName("pole").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(443, "small_steel_plate",
+        (new Item()).setUnlocalizedName("small_steel_plate").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(444, "lamellar_rows",
+        (new Item()).setUnlocalizedName("lamellar_rows").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(446, "gambeson_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.GAMBESON_BOOTS, 1, 3)).setUnlocalizedName("gambeson_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(447, "brigandine_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.BRIGANDINE, 5, 1)).setUnlocalizedName("brigandine_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(448, "shishak_helmet",
+    (new ItemArmor(ItemArmor.ArmorMaterial.SHISHAK, 6, 0)).setUnlocalizedName("shishak_helmet").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(449, "face_helmet",
+    (new ItemArmor(ItemArmor.ArmorMaterial.LAMELLAR, 7, 0)).setUnlocalizedName("face_helmet").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(450, "lamellar_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.LAMELLAR, 7, 1)).setUnlocalizedName("lamellar_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(451, "lamellar_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.LAMELLAR, 7, 3)).setUnlocalizedName("lamellar_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(452, "cuirassier_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CUIRASSIER, 8, 1)).setUnlocalizedName("cuirassier_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(453, "cuirassier_leggings",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CUIRASSIER, 8, 2)).setUnlocalizedName("cuirassier_leggings").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(454, "cuirassier_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CUIRASSIER, 8, 3)).setUnlocalizedName("cuirassier_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(455, "burginot",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CUIRASSIER, 8, 0)).setUnlocalizedName("burginot").setCreativeTab(CreativeTabs.tabCombat));	
+registerItem(456, "crusader_helmet",
+    (new ItemArmor(ItemArmor.ArmorMaterial.GREATHELM, 9, 0)).setUnlocalizedName("crusader_helmet").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(457, "crusader_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CRUSADER, 9, 1)).setUnlocalizedName("crusader_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(458, "crusader_leggings",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CRUSADER, 9, 2)).setUnlocalizedName("crusader_leggings").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(459, "crusader_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.CRUSADER, 9, 3)).setUnlocalizedName("crusader_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(460, "halfarmor_helmet",
+    (new ItemArmor(ItemArmor.ArmorMaterial.BARBUTE, 10, 0)).setUnlocalizedName("halfarmor_helmet").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(461, "halfarmor_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.HALFARMOR, 10, 1)).setUnlocalizedName("halfarmor_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(464, "knight_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.KNIGHT, 12, 1)).setUnlocalizedName("knight_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(465, "knight_leggings",
+    (new ItemArmor(ItemArmor.ArmorMaterial.KNIGHT, 12, 2)).setUnlocalizedName("knight_leggings").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(466, "knight_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.KNIGHT, 12, 3)).setUnlocalizedName("knight_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(467, "gothic_helmet",
+    (new ItemArmor(ItemArmor.ArmorMaterial.SALLET, 14, 0)).setUnlocalizedName("gothic_helmet").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(468, "gothic_chestplate",
+    (new ItemArmor(ItemArmor.ArmorMaterial.GOTHIC, 15, 1)).setUnlocalizedName("gothic_chestplate").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(469, "gothic_leggings",
+    (new ItemArmor(ItemArmor.ArmorMaterial.GOTHIC, 15, 2)).setUnlocalizedName("gothic_leggings").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(470, "gothic_boots",
+    (new ItemArmor(ItemArmor.ArmorMaterial.GOTHIC, 15, 3)).setUnlocalizedName("gothic_boots").setCreativeTab(CreativeTabs.tabCombat));
+
+
+
 		registerItem(2256, (String) "record_13", (new ItemRecord("13")).setUnlocalizedName("record"));
 		registerItem(2257, (String) "record_cat", (new ItemRecord("cat")).setUnlocalizedName("record"));
 		registerItem(2258, (String) "record_blocks", (new ItemRecord("blocks")).setUnlocalizedName("record"));

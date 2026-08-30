@@ -1983,6 +1983,15 @@
       }
     ]
   },
+"custom.trumpet": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "custom/trumpet",
+        "stream": false
+      }
+    ]
+  },
   "music.game.end.dragon": {
     "category": "music",
     "sounds": [
@@ -1992,6 +2001,7 @@
       }
     ]
   },
+
   "music.game.end.credits": {
     "category": "music",
     "sounds": [

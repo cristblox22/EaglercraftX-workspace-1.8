@@ -1082,6 +1082,51 @@ public class RenderItem implements IResourceManagerReloadListener {
 		this.registerItem(Items.record_wait, "record_wait");
 		this.registerItem(Items.prismarine_shard, "prismarine_shard");
 		this.registerItem(Items.prismarine_crystals, "prismarine_crystals");
+
+
+		this.registerItem(Items.trumpet, "trumpet");
+		this.registerItem(Items.hilt, "hilt");
+        this.registerItem(Items.steel_ingot, "steel_ingot");
+        this.registerItem(Items.steel_plate, "steel_plate");
+        this.registerItem(Items.lamellar_rows, "lamellar_rows");
+        this.registerItem(Items.small_steel_plate, "small_steel_plate");
+        this.registerItem(Items.steel_nugget, "steel_nugget");
+        this.registerItem(Items.steel_chain, "steel_chain");
+        this.registerItem(Items.steel_chainmail, "steel_chainmail");
+        this.registerItem(Items.woolen_fabric, "woolen_fabric");
+        this.registerItem(Items.pole, "pole");
+        this.registerItem(Items.steel_ring, "steel_ring");
+        this.registerItem(Items.leather_strip, "leather_strip");
+        this.registerItem(Items.brigandine_chestplate, "brigandine_chestplate");
+        this.registerItem(Items.gambeson_boots, "gambeson_boots");
+        this.registerItem(Items.shishak_helmet, "shishak_helmet");
+		this.registerItem(Items.face_helmet, "face_helmet");
+		this.registerItem(Items.lamellar_chestplate, "lamellar_chestplate");
+		this.registerItem(Items.lamellar_boots, "lamellar_boots");
+		this.registerItem(Items.cuirassier_chestplate, "cuirassier_chestplate");
+		this.registerItem(Items.cuirassier_leggings, "cuirassier_leggings");
+		this.registerItem(Items.cuirassier_boots, "cuirassier_boots");
+		this.registerItem(Items.burginot, "burginot");
+		this.registerItem(Items.crusader_helmet, "crusader_helmet");
+		this.registerItem(Items.crusader_chestplate, "crusader_chestplate");
+		this.registerItem(Items.crusader_leggings, "crusader_leggings");
+		this.registerItem(Items.crusader_boots, "crusader_boots");
+this.registerItem(Items.halfarmor_helmet, "halfarmor_helmet");
+this.registerItem(Items.halfarmor_chestplate, "halfarmor_chestplate");
+this.registerItem(Items.knight_chestplate, "knight_chestplate");
+this.registerItem(Items.knight_leggings, "knight_leggings");
+this.registerItem(Items.knight_boots, "knight_boots");
+this.registerItem(Items.gothic_helmet, "gothic_helmet");
+this.registerItem(Items.gothic_chestplate, "gothic_chestplate");
+this.registerItem(Items.gothic_leggings, "gothic_leggings");
+this.registerItem(Items.gothic_boots, "gothic_boots");
+
+
+
+
+
+
+
 		this.itemModelMesher.register(Items.enchanted_book, new ItemMeshDefinition() {
 			public ModelResourceLocation getModelLocation(ItemStack var1) {
 				return new ModelResourceLocation("enchanted_book", "inventory");

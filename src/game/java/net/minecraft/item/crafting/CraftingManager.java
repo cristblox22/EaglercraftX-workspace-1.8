@@ -364,6 +364,138 @@ public class CraftingManager {
 				new Object[] { Items.gunpowder, Items.blaze_powder, Items.coal });
 		this.addShapelessRecipe(new ItemStack(Items.fire_charge, 3),
 				new Object[] { Items.gunpowder, Items.blaze_powder, new ItemStack(Items.coal, 1, 1) });
+	this.addShapelessRecipe(new ItemStack(Items.leather_strip, 1),
+	new Object[] { Items.leather, Items.leather });
+	this.addShapelessRecipe(new ItemStack(Items.hilt, 1), 
+        new Object[] { Items.leather_strip, Items.stick });
+this.addRecipe(new ItemStack(Items.steel_plate, 2), new Object[] {
+    "XX", 
+    Character.valueOf('X'), Items.steel_ingot 
+});
+    this.addShapelessRecipe(new ItemStack(Items.steel_nugget, 9), 
+        new Object[] { Items.steel_ingot });
+this.addRecipe(new ItemStack(Items.steel_ring, 1), new Object[] {
+    " X ", 
+    "X X", 
+    " X ", 
+    Character.valueOf('X'), Items.steel_nugget 
+});
+this.addRecipe(new ItemStack(Items.steel_chain, 1), new Object[] {
+    "X",
+    "X",
+    "X",
+    Character.valueOf('X'), Items.steel_ring
+});
+this.addRecipe(new ItemStack(Items.woolen_fabric, 4), new Object[] {
+    "XXX",
+    "XXX",
+    Character.valueOf('X'), Items.string
+});
+
+this.addRecipe(new ItemStack(Items.woolen_fabric, 4), new Object[] {
+    "XXX",
+    Character.valueOf('X'), Blocks.wool
+});
+this.addRecipe(new ItemStack(Items.pole, 1), new Object[] {
+    " X",
+    "X ",
+    Character.valueOf('X'), Items.hilt
+});
+this.addRecipe(new ItemStack(Items.small_steel_plate, 8), new Object[] {
+    "XX",
+    "XX",
+    "XX",
+    Character.valueOf('X'), Items.steel_nugget
+});
+this.addRecipe(new ItemStack(Items.lamellar_rows, 1), new Object[] {
+    "PPP",
+    "LLL",
+    "PPP",
+    Character.valueOf('P'), Items.small_steel_plate,
+    Character.valueOf('L'), Items.leather_strip
+});
+this.addRecipe(new ItemStack(Items.gambeson_boots, 1), new Object[] {
+    "WW",
+    "SS",
+    "LL",
+    Character.valueOf('W'), Items.woolen_fabric,
+    Character.valueOf('S'), Items.leather_strip,
+    Character.valueOf('L'), Items.leather
+});
+this.addRecipe(new ItemStack(Items.brigandine_chestplate, 1), new Object[] {
+    "L L",
+    "LPL",
+    "LPL",
+    Character.valueOf('L'), Items.leather,
+    Character.valueOf('P'), Items.steel_plate
+});
+this.addRecipe(new ItemStack(Items.steel_chainmail, 1), new Object[] {
+    "RRR",
+    "RRR",
+    "RRR",
+    Character.valueOf('R'), Items.steel_ring
+});
+this.addRecipe(new ItemStack(Items.chainmail_helmet, 1), new Object[] {
+    "SSS",
+    "S S",
+    Character.valueOf('S'), Items.steel_chainmail
+});
+
+this.addRecipe(new ItemStack(Items.chainmail_chestplate, 1), new Object[] {
+    "S S",
+    "SSS",
+    "SSS",
+    Character.valueOf('S'), Items.steel_chainmail
+});
+this.addRecipe(new ItemStack(Items.chainmail_boots, 1), new Object[] {
+    "SS",
+    "LL",
+    Character.valueOf('S'), Items.leather_strip,
+    Character.valueOf('L'), Items.leather
+});
+this.addRecipe(new ItemStack(Items.face_helmet, 1), new Object[] {
+    "   ",
+    "PSP",
+    "PPP",
+    Character.valueOf('P'), Items.small_steel_plate,
+    Character.valueOf('S'), Items.shishak_helmet
+});
+this.addRecipe(new ItemStack(Items.lamellar_chestplate, 1), new Object[] {
+    "L L",
+    "LLL",
+    "LLL",
+    Character.valueOf('L'), Items.lamellar_rows
+});
+this.addRecipe(new ItemStack(Items.lamellar_boots, 1), new Object[] {
+    "C C",
+    "S S",
+    "L L",
+    Character.valueOf('C'), Items.steel_chainmail,
+    Character.valueOf('S'), Items.leather_strip,
+    Character.valueOf('L'), Items.leather
+});
+this.addRecipe(new ItemStack(Items.shishak_helmet, 1), new Object[] {
+    "III",
+    "INI",
+    "CCC",
+    Character.valueOf('I'), Items.steel_ingot,
+    Character.valueOf('N'), Items.steel_nugget,
+    Character.valueOf('C'), Items.steel_chainmail
+});
+this.addRecipe(new ItemStack(Items.chainmail_leggings, 1), new Object[] {
+    "SSS",
+    "S S",
+    "S S",
+    Character.valueOf('S'), Items.steel_chainmail
+});
+this.addRecipe(new ItemStack(Items.steel_chainmail, 1), new Object[] {
+    "XXX",
+    "XXX",
+    "XXX",
+    Character.valueOf('X'), Items.steel_nugget
+});
+this.addShapelessRecipe(new ItemStack(Items.steel_ingot, 1), 
+        new Object[] { Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget, Items.steel_nugget });
 		this.addRecipe(new ItemStack(Blocks.daylight_detector),
 				new Object[] { "GGG", "QQQ", "WWW", Character.valueOf('G'), Blocks.glass, Character.valueOf('Q'),
 						Items.quartz, Character.valueOf('W'), Blocks.wooden_slab });

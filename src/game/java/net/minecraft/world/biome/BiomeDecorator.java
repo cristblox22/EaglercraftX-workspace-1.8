@@ -9,7 +9,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkProviderSettings;
 import net.minecraft.world.gen.GeneratorBushFeature;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenClay;
@@ -201,22 +200,6 @@ public class BiomeDecorator {
 					this.currentWorld.getTopSolidOrLiquidBlock(this.field_180294_c.add(i2, 0, j6)));
 		}
 
-		int k1 = this.treesPerChunk;
-		if (this.randomGenerator.nextInt(10) == 0) {
-			++k1;
-		}
-
-		for (int j2 = 0; j2 < k1; ++j2) {
-			int k6 = this.randomGenerator.nextInt(16) + 8;
-			int l = this.randomGenerator.nextInt(16) + 8;
-			WorldGenAbstractTree worldgenabstracttree = biomeGenBaseIn.genBigTreeChance(this.randomGenerator);
-			worldgenabstracttree.func_175904_e();
-			BlockPos blockpos = this.currentWorld.getHeight(this.field_180294_c.add(k6, 0, l));
-			if (worldgenabstracttree.generate(this.currentWorld, this.randomGenerator, blockpos)) {
-				worldgenabstracttree.func_180711_a(this.currentWorld, this.randomGenerator, blockpos);
-			}
-		}
-
 		for (int k2 = 0; k2 < this.bigMushroomsPerChunk; ++k2) {
 			int l6 = this.randomGenerator.nextInt(16) + 8;
 			int k10 = this.randomGenerator.nextInt(16) + 8;
@@ -382,8 +365,7 @@ public class BiomeDecorator {
 			for (int l5 = 0; l5 < 20; ++l5) {
 				int j10 = this.randomGenerator.nextInt(16) + 8;
 				int i14 = this.randomGenerator.nextInt(16) + 8;
-				int j17 = this.randomGenerator
-						.nextInt(this.randomGenerator.nextInt(this.randomGenerator.nextInt(240) + 8) + 8);
+				int j17 = this.randomGenerator.nextInt(this.randomGenerator.nextInt(this.randomGenerator.nextInt(240) + 8) + 8);
 				BlockPos blockpos3 = this.field_180294_c.add(j10, j17, i14);
 				(new WorldGenLiquids(Blocks.flowing_lava)).generate(this.currentWorld, this.randomGenerator, blockpos3);
 			}
@@ -391,9 +373,6 @@ public class BiomeDecorator {
 
 	}
 
-	/**+
-	 * Standard ore generation helper. Generates most ores.
-	 */
 	protected void genStandardOre1(int blockCount, WorldGenerator generator, int minHeight, int maxHeight) {
 		if (maxHeight < minHeight) {
 			int i = minHeight;
@@ -415,9 +394,6 @@ public class BiomeDecorator {
 
 	}
 
-	/**+
-	 * Standard ore generation helper. Generates Lapis Lazuli.
-	 */
 	protected void genStandardOre2(int blockCount, WorldGenerator generator, int centerHeight, int spread) {
 		for (int i = 0; i < blockCount; ++i) {
 			BlockPos blockpos = this.field_180294_c.add(this.randomGenerator.nextInt(16),
@@ -428,12 +404,9 @@ public class BiomeDecorator {
 
 	}
 
-	/**+
-	 * Generates ores in the current chunk
-	 */
 	protected void generateOres() {
-		this.genStandardOre1(this.chunkProviderSettings.dirtCount, this.dirtGen,
-				this.chunkProviderSettings.dirtMinHeight, this.chunkProviderSettings.dirtMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.dirtCount, this.dirtGen, this.chunkProviderSettings.dirtMinHeight,
+				this.chunkProviderSettings.dirtMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.gravelCount, this.gravelGen,
 				this.chunkProviderSettings.gravelMinHeight, this.chunkProviderSettings.gravelMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.dioriteCount, this.dioriteGen,
@@ -442,12 +415,12 @@ public class BiomeDecorator {
 				this.chunkProviderSettings.graniteMinHeight, this.chunkProviderSettings.graniteMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.andesiteCount, this.andesiteGen,
 				this.chunkProviderSettings.andesiteMinHeight, this.chunkProviderSettings.andesiteMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.coalCount, this.coalGen,
-				this.chunkProviderSettings.coalMinHeight, this.chunkProviderSettings.coalMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.ironCount, this.ironGen,
-				this.chunkProviderSettings.ironMinHeight, this.chunkProviderSettings.ironMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.goldCount, this.goldGen,
-				this.chunkProviderSettings.goldMinHeight, this.chunkProviderSettings.goldMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.coalCount, this.coalGen, this.chunkProviderSettings.coalMinHeight,
+				this.chunkProviderSettings.coalMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.ironCount, this.ironGen, this.chunkProviderSettings.ironMinHeight,
+				this.chunkProviderSettings.ironMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.goldCount, this.goldGen, this.chunkProviderSettings.goldMinHeight,
+				this.chunkProviderSettings.goldMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.redstoneCount, this.redstoneGen,
 				this.chunkProviderSettings.redstoneMinHeight, this.chunkProviderSettings.redstoneMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.diamondCount, this.diamondGen,

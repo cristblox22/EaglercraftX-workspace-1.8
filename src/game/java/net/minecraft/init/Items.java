@@ -220,6 +220,42 @@ public class Items {
 	public static Item prismarine_shard;
 	public static Item prismarine_crystals;
 	public static Item banner;
+	public static Item trumpet;
+	public static Item steel_ingot;
+	public static Item steel_plate;
+	public static Item small_steel_plate;
+	public static Item lamellar_rows;
+	public static Item leather_strip;
+	public static Item hilt;
+	public static Item steel_nugget;
+	public static Item steel_ring;
+    public static Item brigandine_chestplate;
+    public static Item gambeson_boots;
+	public static Item halfarmor_helmet;
+	public static Item halfarmor_chestplate;
+	public static Item knight_chestplate;
+	public static Item knight_leggings;
+	public static Item knight_boots;
+	public static Item steel_chain;
+	public static Item steel_chainmail;
+	public static Item woolen_fabric;
+	public static Item pole;
+    public static Item shishak_helmet;
+    public static Item face_helmet;
+    public static Item lamellar_chestplate;
+    public static Item lamellar_boots;
+	public static Item cuirassier_chestplate;
+	public static Item cuirassier_leggings;
+	public static Item cuirassier_boots;
+	public static Item burginot;
+	public static Item crusader_helmet;
+	public static Item crusader_chestplate;
+	public static Item crusader_leggings;
+	public static Item crusader_boots;
+	public static Item gothic_helmet;
+	public static Item gothic_chestplate;
+	public static Item gothic_leggings;
+	public static Item gothic_boots;
 
 	private static Item getRegisteredItem(String name) {
 		return (Item) Item.itemRegistry.getObject(new ResourceLocation(name));
@@ -416,6 +452,49 @@ public class Items {
 			prismarine_shard = getRegisteredItem("prismarine_shard");
 			prismarine_crystals = getRegisteredItem("prismarine_crystals");
 			banner = getRegisteredItem("banner");
+
+
+
+			trumpet = getRegisteredItem("trumpet");
+            steel_ingot = getRegisteredItem("steel_ingot");
+            steel_nugget = getRegisteredItem("steel_nugget");
+            steel_chain = getRegisteredItem("steel_chain");
+            woolen_fabric = getRegisteredItem("woolen_fabric");
+            pole = getRegisteredItem("pole");
+            steel_ring = getRegisteredItem("steel_ring");
+            steel_plate = getRegisteredItem("steel_plate");
+            lamellar_rows = getRegisteredItem("lamellar_rows");
+            small_steel_plate = getRegisteredItem("small_steel_plate");
+            hilt = getRegisteredItem("hilt");
+            leather_strip = getRegisteredItem("leather_strip");
+            gambeson_boots = getRegisteredItem("gambeson_boots");
+            brigandine_chestplate = getRegisteredItem("brigandine_chestplate");
+            steel_chainmail = getRegisteredItem("steel_chainmail");
+            shishak_helmet = getRegisteredItem("shishak_helmet");
+            face_helmet = getRegisteredItem("face_helmet");
+			lamellar_chestplate = getRegisteredItem("lamellar_chestplate");
+			lamellar_boots = getRegisteredItem("lamellar_boots");
+			cuirassier_chestplate = getRegisteredItem("cuirassier_chestplate");
+			cuirassier_leggings = getRegisteredItem("cuirassier_leggings");
+			cuirassier_boots = getRegisteredItem("cuirassier_boots");
+			burginot = getRegisteredItem("burginot");
+			crusader_helmet = getRegisteredItem("crusader_helmet");
+			crusader_chestplate = getRegisteredItem("crusader_chestplate");
+			crusader_leggings = getRegisteredItem("crusader_leggings");
+			crusader_boots = getRegisteredItem("crusader_boots");
+			halfarmor_helmet = getRegisteredItem("halfarmor_helmet");
+			halfarmor_chestplate = getRegisteredItem("halfarmor_chestplate");
+			knight_chestplate = getRegisteredItem("knight_chestplate");
+			knight_leggings = getRegisteredItem("knight_leggings");
+			knight_boots = getRegisteredItem("knight_boots");
+			gothic_helmet = getRegisteredItem("gothic_helmet");
+			gothic_chestplate = getRegisteredItem("gothic_chestplate");
+			gothic_leggings = getRegisteredItem("gothic_leggings");
+			gothic_boots = getRegisteredItem("gothic_boots");
+
+
+
+
 		}
 	}
 }

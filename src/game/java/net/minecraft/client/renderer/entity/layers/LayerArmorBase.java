@@ -96,9 +96,13 @@ public abstract class LayerArmorBase<T extends ModelBase> implements LayerRender
 			switch (itemarmor.getArmorMaterial()) {
 			case CHAIN:
 			case IRON:
+			case BRIGANDINE:
 				DeferredStateManager.setRoughnessConstant(0.123f);
 				DeferredStateManager.setMetalnessConstant(0.902f);
 				break;
+			case SHISHAK:
+                 DeferredStateManager.setRoughnessConstant(0.123f);
+				 break;
 			case GOLD:
 				DeferredStateManager.setRoughnessConstant(0.108f);
 				DeferredStateManager.setMetalnessConstant(0.907f);
@@ -122,9 +126,32 @@ public abstract class LayerArmorBase<T extends ModelBase> implements LayerRender
 						|| !CustomItems.bindCustomArmorTexture(itemstack, flag ? 2 : 1, "overlay")) {
 					this.renderer.bindTexture(this.getArmorResource(itemarmor, flag, "overlay"));
 				}
+			case GAMBESON_BOOTS:
+			case BRIGANDINE:
+			case CUIRASSIER:
+			case CRUSADER:
+    GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
+    modelbase.render(entitylivingbaseIn, armorSlot, parFloat2, parFloat4, parFloat5, parFloat6, parFloat7);
+    if (!Config.isCustomItems() || !CustomItems.bindCustomArmorTexture(itemstack, flag ? 2 : 1, "overlay")) {
+        this.renderer.bindTexture(this.getArmorResource(itemarmor, flag, "overlay"));
+    }
+			case GREATHELM:
+				GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
+				modelbase.render(entitylivingbaseIn, armorSlot, parFloat2, parFloat4, parFloat5, parFloat6, parFloat7);
+				if (!Config.isCustomItems()
+						|| !CustomItems.bindCustomArmorTexture(itemstack, flag ? 2 : 1, "overlay")) {
+					this.renderer.bindTexture(this.getArmorResource(itemarmor, flag, "overlay"));
+				}
 			case CHAIN:
 			case IRON:
+			case HALFARMOR:
+			case KNIGHT:
 			case GOLD:
+			case BARBUTE:
+			case SALLET:
+			case GOTHIC:
+			case SHISHAK:
+			case LAMELLAR:
 			case DIAMOND:
 				GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
 				modelbase.render(entitylivingbaseIn, armorSlot, parFloat2, parFloat4, parFloat5, parFloat6, parFloat7);

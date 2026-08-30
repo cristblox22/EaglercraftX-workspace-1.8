@@ -65,6 +65,7 @@ public class FurnaceRecipes {
 		this.addSmelting(Items.beef, new ItemStack(Items.cooked_beef), 0.35F);
 		this.addSmelting(Items.chicken, new ItemStack(Items.cooked_chicken), 0.35F);
 		this.addSmelting(Items.rabbit, new ItemStack(Items.cooked_rabbit), 0.35F);
+		this.addSmelting(Items.iron_ingot, new ItemStack(Items.steel_ingot), 0.7F);
 		this.addSmelting(Items.mutton, new ItemStack(Items.cooked_mutton), 0.35F);
 		this.addSmeltingRecipeForBlock(Blocks.cobblestone, new ItemStack(Blocks.stone), 0.1F);
 		this.addSmeltingRecipe(new ItemStack(Blocks.stonebrick, 1, BlockStoneBrick.DEFAULT_META),
