@@ -2,17 +2,28 @@ package net.minecraft.world.biome;
 
 import net.lax1dude.eaglercraft.v1_8.EaglercraftRandom;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.world.gen.feature.WorldGenSedge;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.BlockSedge;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkProviderSettings;
 import net.minecraft.world.gen.GeneratorBushFeature;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.gen.feature.WorldGenBoulder;
+import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenClay;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
+import net.minecraft.world.gen.feature.WorldGenFallenLog;
+import net.minecraft.world.gen.feature.WorldGenFernPatch;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -21,6 +32,9 @@ import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenSand;
 import net.minecraft.world.gen.feature.WorldGenWaterlily;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
@@ -55,6 +69,7 @@ public class BiomeDecorator {
 	/**+
 	 * The sand generator.
 	 */
+	protected WorldGenerator sedgeGen;
 	protected WorldGenerator sandGen = new WorldGenSand(Blocks.sand, 7);
 	/**+
 	 * The gravel generator.
@@ -97,8 +112,66 @@ public class BiomeDecorator {
 	 * The water lily generation!
 	 */
 	protected WorldGenerator waterlilyGen = new WorldGenWaterlily();
+	/**+
+	 * The fallen oak log generator.
+	 */
+	protected WorldGenFallenLog fallenLogGen = new WorldGenFallenLog(true);
+	/**+
+	 * Minimum block distance (X/Z plane) a fallen log must keep from any
+	 * tree placed this chunk, so it no longer spawns right up against a
+	 * trunk. See placedTreeWorldPositions in genDecorations().
+	 */
+	protected int logTreeClearance = 3;
+	/**+
+	 * The tall fern patch generator.
+	 */
+	protected WorldGenerator fernPatchGen = new WorldGenFernPatch(true);
+	/**+
+	 * The leaf bush generator. Its leaf type is set per-attempt in
+	 * genDecorations to match the current biome.
+	 */
+	protected WorldGenBush bushGen = new WorldGenBush(true);
+	/**+
+	 * The stone/cobblestone/mossy cobblestone/coal ore boulder generator.
+	 */
+	protected WorldGenerator boulderGen = new WorldGenBoulder(true);
 	protected int waterlilyPerChunk;
 	protected int treesPerChunk;
+	/**+
+	 * Minimum block distance (measured on the X/Z plane, at the trunk's
+	 * base position) enforced between trees placed within the same
+	 * decorate() call. Applies to every tree type this biome can spawn -
+	 * oak, birch, savanna, jungle, spruce, dark oak - since they all
+	 * share the single placement loop in genDecorations() below and only
+	 * differ in which WorldGenAbstractTree subclass genBigTreeChance()
+	 * hands back. Raise this for more open/park-like spacing, lower it
+	 * (or set to 0) to go back to vanilla's unspaced placement.
+	 */
+	protected int minTreeSpacing = 4;
+	/**+
+	 * Number of fallen log attempts per chunk. Each attempt only
+	 * succeeds some of the time (see genDecorations), so this isn't
+	 * a guaranteed count.
+	 */
+	protected int fallenLogsPerChunk = 1;
+	/**+
+	 * Number of fern patch attempts per chunk. Each attempt only
+	 * succeeds some of the time (see genDecorations), so this isn't
+	 * a guaranteed count.
+	 */
+	protected int fernPatchesPerChunk = 1;
+	/**+
+	 * Number of leaf bush attempts per chunk. Each attempt only
+	 * succeeds some of the time (see genDecorations), so this isn't
+	 * a guaranteed count - kept deliberately low so bushes don't spam.
+	 */
+	protected int bushesPerChunk = 1;
+	/**+
+	 * Number of boulder attempts per chunk. Each attempt only succeeds
+	 * some of the time (see genDecorations), so this isn't a guaranteed
+	 * count - kept deliberately low so boulders don't spam.
+	 */
+	protected int bouldersPerChunk = 1;
 	/**+
 	 * The number of yellow flower patches to generate per chunk.
 	 * The game generates much less than this number, since it
@@ -150,6 +223,8 @@ public class BiomeDecorator {
 			this.randomGenerator = random;
 			this.field_180294_c = parBlockPos;
 			this.dirtGen = new WorldGenMinable(Blocks.dirt.getDefaultState(), this.chunkProviderSettings.dirtSize);
+			this.dirtGen = new WorldGenMinable(Blocks.dirt.getDefaultState(), this.chunkProviderSettings.dirtSize);
+			this.sedgeGen = new WorldGenSedge(Blocks.sedge, 2);
 			this.gravelGen = new WorldGenMinable(Blocks.gravel.getDefaultState(),
 					this.chunkProviderSettings.gravelSize);
 			this.graniteGen = new WorldGenMinable(
@@ -170,10 +245,44 @@ public class BiomeDecorator {
 					this.chunkProviderSettings.diamondSize);
 			this.lapisGen = new WorldGenMinable(Blocks.lapis_ore.getDefaultState(),
 					this.chunkProviderSettings.lapisSize);
-			this.genDecorations(parBiomeGenBase);
-			this.currentWorld = null;
-			this.randomGenerator = null;
+			// genDecorations() used to run outside a try/finally, so if any
+			// generator threw (e.g. a feature touching a not-yet-generated
+			// neighboring chunk, which re-enters decorate() and throws
+			// "Already decorating" itself), currentWorld/randomGenerator
+			// were never reset to null. That permanently stuck decorate()
+			// in the "already decorating" state - every future chunk
+			// populate() anywhere in the world, forever after, would
+			// immediately throw on the very first line, regardless of
+			// what triggered it (tree gen, liquid tick, anything). Always
+			// resetting state here - even on failure - means one bad
+			// generation attempt just skips that chunk's remaining
+			// decorations instead of bricking the whole world.
+			try {
+				this.genDecorations(parBiomeGenBase);
+			} finally {
+				this.currentWorld = null;
+				this.randomGenerator = null;
+			}
 		}
+	}
+
+	/**+
+	 * True if (x, z) - a chunk-local column offset in the same [8,23]-ish
+	 * space used by the tree placement loop - is at least
+	 * minTreeSpacing blocks (measured on the flat X/Z plane) away from
+	 * every tree already placed this decorate() call.
+	 */
+	private boolean isFarEnoughFromTrees(int x, int z, List<BlockPos> placed) {
+		int minSpacingSq = this.minTreeSpacing * this.minTreeSpacing;
+		for (int i = 0; i < placed.size(); ++i) {
+			BlockPos p = placed.get(i);
+			int dx = p.getX() - x;
+			int dz = p.getZ() - z;
+			if (dx * dx + dz * dz < minSpacingSq) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	protected void genDecorations(BiomeGenBase biomeGenBaseIn) {
@@ -198,6 +307,58 @@ public class BiomeDecorator {
 			int j6 = this.randomGenerator.nextInt(16) + 8;
 			this.gravelAsSandGen.generate(this.currentWorld, this.randomGenerator,
 					this.currentWorld.getTopSolidOrLiquidBlock(this.field_180294_c.add(i2, 0, j6)));
+		}
+
+		int k1 = this.treesPerChunk;
+		if (this.randomGenerator.nextInt(10) == 0) {
+			++k1;
+		}
+
+		// Positions actually used by a successfully-generated tree this
+		// call, so later trees in the same chunk can be checked against
+		// them. Cleared per decorate() call (this method isn't
+		// reentered - see the try/finally around genDecorations() in
+		// decorate()), so it never carries state between chunks.
+		List<BlockPos> placedTreePositions = new ArrayList<BlockPos>();
+		// Absolute world positions of the same trees, for fallen-log
+		// clearance checks below - placedTreePositions above stays in
+		// chunk-local ints since that's what the spacing check compares
+		// against, so this is tracked separately rather than converting
+		// back and forth.
+		List<BlockPos> placedTreeWorldPositions = new ArrayList<BlockPos>();
+
+		for (int j2 = 0; j2 < k1; ++j2) {
+			int k6 = 0;
+			int l = 0;
+			boolean foundSpot = this.minTreeSpacing <= 0;
+
+			// A handful of resample attempts is enough to keep chunks
+			// with a high treesPerChunk (e.g. dense forest biomes) from
+			// mostly failing to place - if every attempt is too close to
+			// an existing tree, this tree is just skipped rather than
+			// forced into a cramped spot.
+			for (int attempt = 0; !foundSpot && attempt < 8; ++attempt) {
+				int candidateX = this.randomGenerator.nextInt(16) + 8;
+				int candidateZ = this.randomGenerator.nextInt(16) + 8;
+				if (this.isFarEnoughFromTrees(candidateX, candidateZ, placedTreePositions)) {
+					k6 = candidateX;
+					l = candidateZ;
+					foundSpot = true;
+				}
+			}
+
+			if (!foundSpot) {
+				continue;
+			}
+
+			WorldGenAbstractTree worldgenabstracttree = biomeGenBaseIn.genBigTreeChance(this.randomGenerator);
+			worldgenabstracttree.func_175904_e();
+			BlockPos blockpos = this.currentWorld.getHeight(this.field_180294_c.add(k6, 0, l));
+			if (worldgenabstracttree.generate(this.currentWorld, this.randomGenerator, blockpos)) {
+				worldgenabstracttree.func_180711_a(this.currentWorld, this.randomGenerator, blockpos);
+				placedTreePositions.add(new BlockPos(k6, 0, l));
+				placedTreeWorldPositions.add(blockpos);
+			}
 		}
 
 		for (int k2 = 0; k2 < this.bigMushroomsPerChunk; ++k2) {
@@ -232,6 +393,50 @@ public class BiomeDecorator {
 				int l17 = this.randomGenerator.nextInt(k14);
 				biomeGenBaseIn.getRandomWorldGenForGrass(this.randomGenerator).generate(this.currentWorld,
 						this.randomGenerator, this.field_180294_c.add(j7, l17, i11));
+			}
+		}
+
+		for (int fl0 = 0; fl0 < this.fallenLogsPerChunk; ++fl0) {
+			if (this.randomGenerator.nextInt(10) == 0) {
+				int fl1 = this.randomGenerator.nextInt(16) + 8;
+				int fl2 = this.randomGenerator.nextInt(16) + 8;
+				BlockPos fl3 = this.currentWorld.getHeight(this.field_180294_c.add(fl1, 0, fl2));
+				this.fallenLogGen.setTreesToAvoid(placedTreeWorldPositions, this.logTreeClearance);
+				this.fallenLogGen.generate(this.currentWorld, this.randomGenerator, fl3);
+			}
+		}
+
+		for (int fp0 = 0; fp0 < this.fernPatchesPerChunk; ++fp0) {
+			if (this.randomGenerator.nextInt(6) == 0) {
+				int fp1 = this.randomGenerator.nextInt(16) + 8;
+				int fp2 = this.randomGenerator.nextInt(16) + 8;
+				BlockPos fp3 = this.currentWorld.getHeight(this.field_180294_c.add(fp1, 0, fp2));
+				this.fernPatchGen.generate(this.currentWorld, this.randomGenerator, fp3);
+			}
+		}
+for (int sedge = 0; sedge < 2; ++sedge) {
+			int sx = this.randomGenerator.nextInt(16) + 8;
+			int sz = this.randomGenerator.nextInt(16) + 8;
+			BlockPos spos = this.currentWorld.getHeight(this.field_180294_c.add(sx, 0, sz));
+			this.sedgeGen.generate(this.currentWorld, this.randomGenerator, spos);
+		}
+
+		for (int bu0 = 0; bu0 < this.bushesPerChunk; ++bu0) {
+			if (this.randomGenerator.nextInt(8) == 0) {
+				int bu1 = this.randomGenerator.nextInt(16) + 8;
+				int bu2 = this.randomGenerator.nextInt(16) + 8;
+				BlockPos bu3 = this.currentWorld.getHeight(this.field_180294_c.add(bu1, 0, bu2));
+				this.bushGen.setLeavesState(this.pickBushLeaves(biomeGenBaseIn));
+				this.bushGen.generate(this.currentWorld, this.randomGenerator, bu3);
+			}
+		}
+
+		for (int bo0 = 0; bo0 < this.bouldersPerChunk; ++bo0) {
+			if (this.randomGenerator.nextInt(12) == 0) {
+				int bo1 = this.randomGenerator.nextInt(16) + 8;
+				int bo2 = this.randomGenerator.nextInt(16) + 8;
+				BlockPos bo3 = this.currentWorld.getHeight(this.field_180294_c.add(bo1, 0, bo2));
+				this.boulderGen.generate(this.currentWorld, this.randomGenerator, bo3);
 			}
 		}
 
@@ -365,7 +570,8 @@ public class BiomeDecorator {
 			for (int l5 = 0; l5 < 20; ++l5) {
 				int j10 = this.randomGenerator.nextInt(16) + 8;
 				int i14 = this.randomGenerator.nextInt(16) + 8;
-				int j17 = this.randomGenerator.nextInt(this.randomGenerator.nextInt(this.randomGenerator.nextInt(240) + 8) + 8);
+				int j17 = this.randomGenerator
+						.nextInt(this.randomGenerator.nextInt(this.randomGenerator.nextInt(240) + 8) + 8);
 				BlockPos blockpos3 = this.field_180294_c.add(j10, j17, i14);
 				(new WorldGenLiquids(Blocks.flowing_lava)).generate(this.currentWorld, this.randomGenerator, blockpos3);
 			}
@@ -373,6 +579,37 @@ public class BiomeDecorator {
 
 	}
 
+	/**+
+	 * Picks a non-decaying leaf block state to match the current biome,
+	 * for use by the standalone leaf bush feature. Falls back to oak
+	 * leaves for any biome that doesn't match a more specific type.
+	 */
+	protected net.minecraft.block.state.IBlockState pickBushLeaves(BiomeGenBase biomeGenBaseIn) {
+		String name = biomeGenBaseIn.biomeName;
+		if (name.contains("Jungle")) {
+			return Blocks.leaves.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		} else if (name.contains("Birch")) {
+			return Blocks.leaves.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.BIRCH)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		} else if (name.contains("Taiga")) {
+			return Blocks.leaves.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.SPRUCE)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		} else if (name.contains("Roofed")) {
+			return Blocks.leaves2.getDefaultState().withProperty(BlockNewLeaf.VARIANT, BlockPlanks.EnumType.DARK_OAK)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		} else if (name.contains("Savanna")) {
+			return Blocks.leaves2.getDefaultState().withProperty(BlockNewLeaf.VARIANT, BlockPlanks.EnumType.ACACIA)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		} else {
+			return Blocks.leaves.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+		}
+	}
+
+	/**+
+	 * Standard ore generation helper. Generates most ores.
+	 */
 	protected void genStandardOre1(int blockCount, WorldGenerator generator, int minHeight, int maxHeight) {
 		if (maxHeight < minHeight) {
 			int i = minHeight;
@@ -394,6 +631,9 @@ public class BiomeDecorator {
 
 	}
 
+	/**+
+	 * Standard ore generation helper. Generates Lapis Lazuli.
+	 */
 	protected void genStandardOre2(int blockCount, WorldGenerator generator, int centerHeight, int spread) {
 		for (int i = 0; i < blockCount; ++i) {
 			BlockPos blockpos = this.field_180294_c.add(this.randomGenerator.nextInt(16),
@@ -404,9 +644,12 @@ public class BiomeDecorator {
 
 	}
 
+	/**+
+	 * Generates ores in the current chunk
+	 */
 	protected void generateOres() {
-		this.genStandardOre1(this.chunkProviderSettings.dirtCount, this.dirtGen, this.chunkProviderSettings.dirtMinHeight,
-				this.chunkProviderSettings.dirtMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.dirtCount, this.dirtGen,
+				this.chunkProviderSettings.dirtMinHeight, this.chunkProviderSettings.dirtMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.gravelCount, this.gravelGen,
 				this.chunkProviderSettings.gravelMinHeight, this.chunkProviderSettings.gravelMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.dioriteCount, this.dioriteGen,
@@ -415,12 +658,12 @@ public class BiomeDecorator {
 				this.chunkProviderSettings.graniteMinHeight, this.chunkProviderSettings.graniteMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.andesiteCount, this.andesiteGen,
 				this.chunkProviderSettings.andesiteMinHeight, this.chunkProviderSettings.andesiteMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.coalCount, this.coalGen, this.chunkProviderSettings.coalMinHeight,
-				this.chunkProviderSettings.coalMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.ironCount, this.ironGen, this.chunkProviderSettings.ironMinHeight,
-				this.chunkProviderSettings.ironMaxHeight);
-		this.genStandardOre1(this.chunkProviderSettings.goldCount, this.goldGen, this.chunkProviderSettings.goldMinHeight,
-				this.chunkProviderSettings.goldMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.coalCount, this.coalGen,
+				this.chunkProviderSettings.coalMinHeight, this.chunkProviderSettings.coalMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.ironCount, this.ironGen,
+				this.chunkProviderSettings.ironMinHeight, this.chunkProviderSettings.ironMaxHeight);
+		this.genStandardOre1(this.chunkProviderSettings.goldCount, this.goldGen,
+				this.chunkProviderSettings.goldMinHeight, this.chunkProviderSettings.goldMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.redstoneCount, this.redstoneGen,
 				this.chunkProviderSettings.redstoneMinHeight, this.chunkProviderSettings.redstoneMaxHeight);
 		this.genStandardOre1(this.chunkProviderSettings.diamondCount, this.diamondGen,

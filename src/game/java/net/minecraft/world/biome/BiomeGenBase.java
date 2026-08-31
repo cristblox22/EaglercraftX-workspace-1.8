@@ -41,6 +41,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBigTree;
+import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDoublePlant;
 import net.minecraft.world.gen.feature.WorldGenSwamp;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
@@ -134,6 +135,7 @@ public abstract class BiomeGenBase {
 	protected static NoiseGeneratorPerlin temperatureNoise;
 	protected static NoiseGeneratorPerlin GRASS_COLOR_NOISE;
 	protected static WorldGenDoublePlant DOUBLE_PLANT_GENERATOR;
+	protected static WorldGenBush SEDGE_GENERATOR;
 	public String biomeName;
 	public int color;
 	public int field_150609_ah;
@@ -373,7 +375,17 @@ public abstract class BiomeGenBase {
 	}
 
 	public void decorate(World worldIn, EaglercraftRandom rand, BlockPos pos) {
-		this.theBiomeDecorator.decorate(worldIn, rand, this, pos);
+		try {
+			this.theBiomeDecorator.decorate(worldIn, rand, this, pos);
+		} catch (RuntimeException e) {
+			if (e.getMessage() != null && e.getMessage().contains("Already decorating")) {
+				// Safety check to prevent recursive chunk generation loops caused by
+				// custom foliage like sedge/bush overflowing into unloaded chunks.
+				logger.warn("Caught 'Already decorating' exception at " + pos + " - stopping local chunk decoration to prevent crash.");
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	public int getGrassColorAtPos(BlockPos pos) {
@@ -634,6 +646,7 @@ public abstract class BiomeGenBase {
 		temperatureNoise = new NoiseGeneratorPerlin(new EaglercraftRandom(1234L), 1);
 		GRASS_COLOR_NOISE = new NoiseGeneratorPerlin(new EaglercraftRandom(2345L), 1);
 		DOUBLE_PLANT_GENERATOR = new WorldGenDoublePlant();
+		SEDGE_GENERATOR = new WorldGenBush(false);
 	}
 
 	public static class Height {

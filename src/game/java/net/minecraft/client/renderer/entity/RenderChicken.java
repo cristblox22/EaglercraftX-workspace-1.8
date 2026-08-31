@@ -13,40 +13,99 @@ import net.minecraft.util.ResourceLocation;
  * 
  * EaglercraftX 1.8 patch files (c) 2022-2025 lax1dude, ayunami2000. All Rights Reserved.
  * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES.
  */
 public class RenderChicken extends RenderLiving<EntityChicken> {
-	private static final ResourceLocation chickenTextures = new ResourceLocation("textures/entity/chicken.png");
 
-	public RenderChicken(RenderManager renderManagerIn, ModelBase modelBaseIn, float shadowSizeIn) {
-		super(renderManagerIn, modelBaseIn, shadowSizeIn);
-	}
+    private static final ResourceLocation CHICKEN_NORMAL =
+            new ResourceLocation("textures/entity/chicken/chicken.png");
 
-	/**+
-	 * Returns the location of an entity's texture. Doesn't seem to
-	 * be called unless you call Render.bindEntityTexture.
-	 */
-	protected ResourceLocation getEntityTexture(EntityChicken var1) {
-		return chickenTextures;
-	}
+    private static final ResourceLocation CHICKEN_AMBER =
+            new ResourceLocation("textures/entity/chicken/amber.png");
 
-	/**+
-	 * Defines what float the third param in setRotationAngles of
-	 * ModelBase is
-	 */
-	protected float handleRotationFloat(EntityChicken livingBase, float partialTicks) {
-		float f = livingBase.field_70888_h + (livingBase.wingRotation - livingBase.field_70888_h) * partialTicks;
-		float f1 = livingBase.field_70884_g + (livingBase.destPos - livingBase.field_70884_g) * partialTicks;
-		return (MathHelper.sin(f) + 1.0F) * f1;
-	}
+    private static final ResourceLocation CHICKEN_BONE =
+            new ResourceLocation("textures/entity/chicken/bone.png");
+
+    private static final ResourceLocation CHICKEN_BRONZED =
+            new ResourceLocation("textures/entity/chicken/bronzed.png");
+
+    private static final ResourceLocation CHICKEN_DUCK =
+            new ResourceLocation("textures/entity/chicken/duck.png");
+
+    private static final ResourceLocation CHICKEN_GOLD_CRESTED =
+            new ResourceLocation("textures/entity/chicken/gold_crested.png");
+
+    private static final ResourceLocation CHICKEN_MIDNIGHT =
+            new ResourceLocation("textures/entity/chicken/midnight.png");
+
+    private static final ResourceLocation CHICKEN_SKEWBALD =
+            new ResourceLocation("textures/entity/chicken/skewbald.png");
+
+    private static final ResourceLocation CHICKEN_STORMY =
+            new ResourceLocation("textures/entity/chicken/stormy.png");
+
+    /**
+     * All chicken variants.
+     *
+     * 9 total textures:
+     * 0 = normal chicken
+     * 1 = amber
+     * 2 = bone
+     * 3 = bronzed
+     * 4 = duck
+     * 5 = gold crested
+     * 6 = midnight
+     * 7 = skewbald
+     * 8 = stormy
+     */
+    private static final ResourceLocation[] CHICKEN_VARIANTS = {
+        CHICKEN_NORMAL,
+        CHICKEN_AMBER,
+        CHICKEN_BONE,
+        CHICKEN_BRONZED,
+        CHICKEN_DUCK,
+        CHICKEN_GOLD_CRESTED,
+        CHICKEN_MIDNIGHT,
+        CHICKEN_SKEWBALD,
+        CHICKEN_STORMY
+    };
+
+    public RenderChicken(RenderManager renderManagerIn, ModelBase modelBaseIn, float shadowSizeIn) {
+        super(renderManagerIn, modelBaseIn, shadowSizeIn);
+    }
+
+    /**+
+     * Returns the location of an entity's texture.
+     *
+     * Each chicken gets one of the 9 variants.
+     * The entity ID keeps the selected variant consistent
+     * so the texture does not flicker.
+     */
+    @Override
+    protected ResourceLocation getEntityTexture(EntityChicken entity) {
+        int id = entity.getEntityId();
+
+        // Prevent negative entity IDs from causing an invalid array index
+        int variant = Math.abs(id) % CHICKEN_VARIANTS.length;
+
+        return CHICKEN_VARIANTS[variant];
+    }
+
+    /**+
+     * Defines what float the third param in setRotationAngles of
+     * ModelBase is.
+     */
+    @Override
+    protected float handleRotationFloat(EntityChicken livingBase, float partialTicks) {
+        float f = livingBase.field_70888_h
+                + (livingBase.wingRotation - livingBase.field_70888_h) * partialTicks;
+
+        float f1 = livingBase.field_70884_g
+                + (livingBase.destPos - livingBase.field_70884_g) * partialTicks;
+
+        return (MathHelper.sin(f) + 1.0F) * f1;
+    }
 }

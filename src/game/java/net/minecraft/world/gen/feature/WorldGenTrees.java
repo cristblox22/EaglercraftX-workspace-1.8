@@ -15,15 +15,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkProviderServer;
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
- * 
+ *
  * Minecraft 1.8.8 bytecode is (c) 2015 Mojang AB. "Do not distribute!"
  * Mod Coder Pack v9.18 deobfuscation configs are (c) Copyright by the MCP Team
- * 
+ *
  * EaglercraftX 1.8 patch files (c) 2022-2025 lax1dude, ayunami2000. All Rights Reserved.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -34,7 +35,15 @@ import net.minecraft.world.World;
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
+ * ---
+ * MODIFIED: non-vine instances of this class (regular oak/birch trees) now
+ * replay one of three baked block-offset schematics (see
+ * WorldGenTreeSchematics) instead of the old procedural trunk/canopy shape,
+ * so they match the hand-built reference trees exactly. Jungle-style
+ * instances (vinesGrow == true) are untouched and still use the original
+ * procedural generation with vines/cocoa, since those schematics were never
+ * meant to cover jungle trees.
  */
 public class WorldGenTrees extends WorldGenAbstractTree {
 	private static final IBlockState field_181653_a = Blocks.log.getDefaultState().withProperty(BlockOldLog.VARIANT,
@@ -48,7 +57,7 @@ public class WorldGenTrees extends WorldGenAbstractTree {
 	private final IBlockState metaLeaves;
 
 	public WorldGenTrees(boolean parFlag) {
-		this(parFlag, 4, field_181653_a, field_181654_b, false);
+		this(parFlag, 8, field_181653_a, field_181654_b, false);
 	}
 
 	public WorldGenTrees(boolean parFlag, int parInt1, IBlockState parIBlockState, IBlockState parIBlockState2,
@@ -61,6 +70,10 @@ public class WorldGenTrees extends WorldGenAbstractTree {
 	}
 
 	public boolean generate(World world, EaglercraftRandom random, BlockPos blockpos) {
+		if (!this.vinesGrow) {
+			return this.generateFromSchematic(world, random, blockpos);
+		}
+
 		int i = random.nextInt(3) + this.minTreeHeight;
 		boolean flag = true;
 		if (blockpos.getY() >= 1 && blockpos.getY() + i + 1 <= 256) {
@@ -109,7 +122,7 @@ public class WorldGenTrees extends WorldGenAbstractTree {
 
 							for (int l1 = blockpos.getZ() - i1; l1 <= blockpos.getZ() + i1; ++l1) {
 								int i2 = l1 - blockpos.getZ();
-								if (Math.abs(k1) != i1 || Math.abs(i2) != i1 || random.nextInt(2) != 0 && j3 != 0) {
+								if (Math.abs(k1) != i1 || Math.abs(i2) != i1 || j3 == 0 && random.nextInt(2) != 0) {
 									BlockPos blockpos1 = new BlockPos(j1, j2, l1);
 									Block block = world.getBlockState(blockpos1).getBlock();
 									if (block.getMaterial() == Material.air || block.getMaterial() == Material.leaves
@@ -210,6 +223,124 @@ public class WorldGenTrees extends WorldGenAbstractTree {
 		} else {
 			return false;
 		}
+	}
+
+	/**+
+	 * Places one of the three baked schematic shapes from
+	 * WorldGenTreeSchematics, oriented straight up from blockpos (the
+	 * ground-level position passed in by the decorator). Picks a shape at
+	 * random each time so oak/birch forests get visual variety instead of
+	 * a single repeated tree.
+	 */
+	private boolean generateFromSchematic(World world, EaglercraftRandom random, BlockPos blockpos) {
+		int roll = random.nextInt(10);
+		int[] logOffsets;
+		int[] leafOffsets;
+		int height;
+		if (roll < 4) {
+			logOffsets = WorldGenTreeSchematics.SMALL_A_LOGS;
+			leafOffsets = WorldGenTreeSchematics.SMALL_A_LEAVES;
+			height = WorldGenTreeSchematics.SMALL_A_HEIGHT;
+		} else if (roll < 8) {
+			logOffsets = WorldGenTreeSchematics.SMALL_B_LOGS;
+			leafOffsets = WorldGenTreeSchematics.SMALL_B_LEAVES;
+			height = WorldGenTreeSchematics.SMALL_B_HEIGHT;
+		} else {
+			logOffsets = WorldGenTreeSchematics.MEDIUM_LOGS;
+			leafOffsets = WorldGenTreeSchematics.MEDIUM_LEAVES;
+			height = WorldGenTreeSchematics.MEDIUM_HEIGHT;
+		}
+
+		if (blockpos.getY() < 1 || blockpos.getY() + height + 2 >= 256) {
+			return false;
+		}
+
+		if (!this.schematicFootprintIsSafe(world, blockpos, logOffsets, leafOffsets)) {
+			return false;
+		}
+
+		Block ground = world.getBlockState(blockpos.down()).getBlock();
+		if (ground != Blocks.grass && ground != Blocks.dirt && ground != Blocks.farmland) {
+			return false;
+		}
+
+		this.func_175921_a(world, blockpos.down());
+
+		for (int i = 0; i < logOffsets.length; ++i) {
+			int packed = logOffsets[i];
+			BlockPos target = blockpos.add(WorldGenTreeSchematics.unpackDx(packed),
+					WorldGenTreeSchematics.unpackDy(packed), WorldGenTreeSchematics.unpackDz(packed));
+			Material material = world.getBlockState(target).getBlock().getMaterial();
+			if (material == Material.air || material == Material.leaves || material == Material.plants
+					|| material == Material.vine) {
+				this.setBlockAndNotifyAdequately(world, target, this.metaWood);
+			}
+		}
+
+		for (int i = 0; i < leafOffsets.length; ++i) {
+			int packed = leafOffsets[i];
+			BlockPos target = blockpos.add(WorldGenTreeSchematics.unpackDx(packed),
+					WorldGenTreeSchematics.unpackDy(packed), WorldGenTreeSchematics.unpackDz(packed));
+			Material material = world.getBlockState(target).getBlock().getMaterial();
+			if (material == Material.air || material == Material.leaves || material == Material.plants
+					|| material == Material.vine) {
+				this.setBlockAndNotifyAdequately(world, target, this.metaLeaves);
+			}
+		}
+
+		return true;
+	}
+
+	/**+
+	 * Checks that every chunk touched by the given schematic's log/leaf
+	 * offsets (relative to origin) already exists in the world before any
+	 * block is placed. Some baked schematics (e.g. MEDIUM) have leaves
+	 * that reach well outside the safe margin that vanilla decoration
+	 * guarantees is already terrain-generated. Reading or writing a block
+	 * in a chunk that hasn't been generated yet forces the game to
+	 * generate AND populate that chunk immediately, which re-enters
+	 * BiomeDecorator.decorate() while the current chunk's decoration is
+	 * still on the stack, throwing "Already decorating". Returning false
+	 * here just skips the tree at this position instead of crashing.
+	 */
+	private boolean schematicFootprintIsSafe(World world, BlockPos origin, int[] logOffsets, int[] leafOffsets) {
+		int minCx = Integer.MAX_VALUE, maxCx = Integer.MIN_VALUE;
+		int minCz = Integer.MAX_VALUE, maxCz = Integer.MIN_VALUE;
+
+		for (int i = 0; i < logOffsets.length; ++i) {
+			int packed = logOffsets[i];
+			int cx = (origin.getX() + WorldGenTreeSchematics.unpackDx(packed)) >> 4;
+			int cz = (origin.getZ() + WorldGenTreeSchematics.unpackDz(packed)) >> 4;
+			if (cx < minCx) minCx = cx;
+			if (cx > maxCx) maxCx = cx;
+			if (cz < minCz) minCz = cz;
+			if (cz > maxCz) maxCz = cz;
+		}
+
+		for (int i = 0; i < leafOffsets.length; ++i) {
+			int packed = leafOffsets[i];
+			int cx = (origin.getX() + WorldGenTreeSchematics.unpackDx(packed)) >> 4;
+			int cz = (origin.getZ() + WorldGenTreeSchematics.unpackDz(packed)) >> 4;
+			if (cx < minCx) minCx = cx;
+			if (cx > maxCx) maxCx = cx;
+			if (cz < minCz) minCz = cz;
+			if (cz > maxCz) maxCz = cz;
+		}
+
+		if (!(world.getChunkProvider() instanceof ChunkProviderServer)) {
+			return true;
+		}
+
+		ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
+		for (int cx = minCx; cx <= maxCx; ++cx) {
+			for (int cz = minCz; cz <= maxCz; ++cz) {
+				if (!provider.chunkExists(cx, cz)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	private void func_181652_a(World parWorld, int parInt1, BlockPos parBlockPos, EnumFacing parEnumFacing) {

@@ -117,6 +117,7 @@ public class Blocks {
 	public static Block diamond_block;
 	public static Block crafting_table;
 	public static Block wheat;
+	public static Block sedge;
 	public static Block farmland;
 	public static Block furnace;
 	public static Block lit_furnace;
@@ -328,6 +329,7 @@ public class Blocks {
 			diamond_block = getRegisteredBlock("diamond_block");
 			crafting_table = getRegisteredBlock("crafting_table");
 			wheat = getRegisteredBlock("wheat");
+			sedge = getRegisteredBlock("sedge");
 			farmland = getRegisteredBlock("farmland");
 			furnace = getRegisteredBlock("furnace");
 			lit_furnace = getRegisteredBlock("lit_furnace");

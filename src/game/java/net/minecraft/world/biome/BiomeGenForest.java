@@ -3,7 +3,13 @@ package net.minecraft.world.biome;
 import net.lax1dude.eaglercraft.v1_8.EaglercraftRandom;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -11,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenCanopyTree;
 import net.minecraft.world.gen.feature.WorldGenForest;
+import net.minecraft.world.gen.feature.WorldGenTrees;
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
@@ -31,11 +38,25 @@ import net.minecraft.world.gen.feature.WorldGenForest;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  * 
+ * ---
+ * MODIFIED: field_150630_aD (the tree used for regular birch forest,
+ * field_150632_aF == 2) used to be a WorldGenForest instance, which was
+ * never converted to the baked block-offset schematics that WorldGenTrees
+ * and WorldGenSavannaTree now use - so birch forests were silently still
+ * generating the old procedural shape. It's now a WorldGenTrees instance
+ * with birch log/leaf states and vinesGrow=false, so it goes through the
+ * exact same generateFromSchematic() path as oak. field_150629_aC (the
+ * "tall birch" variant used only in the mutated/hills biome) is left as
+ * WorldGenForest since there's no tall-birch schematic to swap in.
  */
 public class BiomeGenForest extends BiomeGenBase {
 	private int field_150632_aF;
 	protected static final WorldGenForest field_150629_aC = new WorldGenForest(false, true);
-	protected static final WorldGenForest field_150630_aD = new WorldGenForest(false, false);
+	protected static final WorldGenTrees field_150630_aD = new WorldGenTrees(false, 5,
+			Blocks.log.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.BIRCH),
+			Blocks.leaves.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.BIRCH)
+					.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)),
+			false);
 	protected static final WorldGenCanopyTree field_150631_aE = new WorldGenCanopyTree(false);
 
 	public BiomeGenForest(int parInt1, int parInt2) {

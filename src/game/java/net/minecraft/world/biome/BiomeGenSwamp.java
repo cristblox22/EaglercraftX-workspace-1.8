@@ -9,6 +9,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenTrees;
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
@@ -29,8 +30,18 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  * 
+ * ---
+ * MODIFIED: genBigTreeChance() used to return this.worldGeneratorSwamp, a
+ * separate leaning/vine-covered tree class that was never converted to the
+ * baked block-offset schematics used elsewhere. It now returns a
+ * WorldGenTrees instance (oak log/leaf states, vinesGrow=false), so swamp
+ * trees go through the same generateFromSchematic() path as everything
+ * else. Trade-off: this drops the old leaning-trunk/vine look in favor of
+ * consistency with the rest of the world gen.
  */
 public class BiomeGenSwamp extends BiomeGenBase {
+	private static final WorldGenTrees SWAMP_TREE_GEN = new WorldGenTrees(false);
+
 	protected BiomeGenSwamp(int parInt1) {
 		super(parInt1);
 		this.theBiomeDecorator.treesPerChunk = 2;
@@ -48,7 +59,7 @@ public class BiomeGenSwamp extends BiomeGenBase {
 	}
 
 	public WorldGenAbstractTree genBigTreeChance(EaglercraftRandom var1) {
-		return this.worldGeneratorSwamp;
+		return SWAMP_TREE_GEN;
 	}
 
 	public int getGrassColorAtPos(BlockPos blockpos) {
