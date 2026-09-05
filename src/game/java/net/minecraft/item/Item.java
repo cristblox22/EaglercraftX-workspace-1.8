@@ -1101,6 +1101,14 @@ registerItem(469, "gothic_leggings",
     (new ItemArmor(ItemArmor.ArmorMaterial.GOTHIC, 15, 2)).setUnlocalizedName("gothic_leggings").setCreativeTab(CreativeTabs.tabCombat));
 registerItem(470, "gothic_boots",
     (new ItemArmor(ItemArmor.ArmorMaterial.GOTHIC, 15, 3)).setUnlocalizedName("gothic_boots").setCreativeTab(CreativeTabs.tabCombat));
+registerItem(471, "bear_fur",
+        (new Item()).setUnlocalizedName("bear_fur").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(472, "crocodile_scute",
+        (new Item()).setUnlocalizedName("crocodile_scute").setCreativeTab(CreativeTabs.tabMaterials));
+registerItem(473, "raccoon_tail",
+        (new Item()).setUnlocalizedName("raccoon_tail").setCreativeTab(CreativeTabs.tabMaterials));
+
+
 
 
 

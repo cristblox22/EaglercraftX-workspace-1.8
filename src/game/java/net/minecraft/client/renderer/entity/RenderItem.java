@@ -1120,6 +1120,9 @@ this.registerItem(Items.gothic_helmet, "gothic_helmet");
 this.registerItem(Items.gothic_chestplate, "gothic_chestplate");
 this.registerItem(Items.gothic_leggings, "gothic_leggings");
 this.registerItem(Items.gothic_boots, "gothic_boots");
+this.registerItem(Items.bear_fur, "bear_fur");
+this.registerItem(Items.crocodile_scute, "crocodile_scute");
+this.registerItem(Items.raccoon_tail, "raccoon_tail");
 
 
 

@@ -10,7 +10,7 @@ public class EaglercraftVersion {
 	/// Customize these to fit your fork:
 	
 	public static final String projectForkName = "Hylex";
-	public static final String projectForkVersion = "u54";
+	public static final String projectForkVersion = "u1";
 	public static final String projectForkVendor = "Itzsplicez";
 	
 	public static final String projectForkURL = "/lax1dude/eaglercraftx-1.8";
@@ -20,7 +20,7 @@ public class EaglercraftVersion {
 	public static final String projectOriginName = "Hylex";
 	public static final String projectOriginAuthor = "Itzsplicez";
 	public static final String projectOriginRevision = "1.8";
-	public static final String projectOriginVersion = "u54";
+	public static final String projectOriginVersion = "u1";
 	
 	public static final String projectOriginURL = "/eaglercraftx-1.8"; // rest in peace
 	

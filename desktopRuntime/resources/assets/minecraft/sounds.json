@@ -1121,6 +1121,18 @@
       "mob/skeleton/say3"
     ]
   },
+"custom.croak": {
+    "category": "neutral",
+    "sounds": [
+      { "name": "custom/croak1", "stream": false },
+      { "name": "custom/croak2", "stream": false },
+      { "name": "custom/croak3", "stream": false }
+    ]
+  },
+   "tasmanian_devil_custom_roar": {
+     "category": "hostile",
+     "sounds": ["custom/roar"]
+   },
   "mob.skeleton.step": {
     "category": "hostile",
     "sounds": [

@@ -36,6 +36,11 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.EntityGrizzlyBear;
+import net.minecraft.entity.passive.EntityCrow;
+import net.minecraft.entity.passive.EntityCrocodile;
+import net.minecraft.entity.passive.EntityRaccoon;
+import net.minecraft.entity.passive.EntityTasmanianDevil;
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
@@ -97,5 +102,10 @@ public class EntitySpawnPlacementRegistry {
 		ENTITY_PLACEMENTS.put(EntitySpider.class, EntityLiving.SpawnPlacementType.ON_GROUND);
 		ENTITY_PLACEMENTS.put(EntityWitch.class, EntityLiving.SpawnPlacementType.ON_GROUND);
 		ENTITY_PLACEMENTS.put(EntityZombie.class, EntityLiving.SpawnPlacementType.ON_GROUND);
+		ENTITY_PLACEMENTS.put(EntityGrizzlyBear.class, EntityLiving.SpawnPlacementType.ON_GROUND);
+		ENTITY_PLACEMENTS.put(EntityCrocodile.class, EntityLiving.SpawnPlacementType.ON_GROUND);
+		ENTITY_PLACEMENTS.put(EntityRaccoon.class, EntityLiving.SpawnPlacementType.ON_GROUND);
+		ENTITY_PLACEMENTS.put(EntityCrow.class, EntityLiving.SpawnPlacementType.ON_GROUND);
+		ENTITY_PLACEMENTS.put(EntityTasmanianDevil.class, EntityLiving.SpawnPlacementType.ON_GROUND);
 	}
 }

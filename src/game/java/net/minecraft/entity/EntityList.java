@@ -83,6 +83,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
+import net.minecraft.entity.passive.EntityGrizzlyBear;
+import net.minecraft.entity.passive.EntityCrocodile;
+import net.minecraft.entity.passive.EntityRaccoon;
+import net.minecraft.entity.passive.EntityCrow;
+import net.minecraft.entity.passive.EntityTasmanianDevil;
+
 
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
@@ -400,6 +406,12 @@ public class EntityList {
 		addMapping(EntityRabbit.class, EntityRabbit::new, "Rabbit", 101, 10051392, 7555121);
 		addMapping(EntityVillager.class, EntityVillager::new, "Villager", 120, 5651507, 12422002);
 		addMapping(EntityEnderCrystal.class, EntityEnderCrystal::new, "EnderCrystal", 200);
+		addMapping(EntityGrizzlyBear.class, EntityGrizzlyBear::new, "GrizzlyBear", 102, 6316128, 4210752);
+		addMapping(EntityCrocodile.class, EntityCrocodile::new, "Crocodile", 103, 6316128, 4210752);
+		addMapping(EntityRaccoon.class, EntityRaccoon::new, "Raccoon", 104, 6316128, 4210752);
+addMapping(EntityCrow.class, EntityCrow::new, "Crow", 105, 1710618, 0);
+addMapping(EntityTasmanianDevil.class, EntityTasmanianDevil::new, "TasmanianDevil", 106, 1710618, 0);
+
 	}
 
 	public static class EntityEggInfo {

@@ -5,19 +5,6 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
-/**+
- * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
- * 
- * Minecraft 1.8.8 bytecode is (c) 2015 Mojang AB. "Do not distribute!"
- * Mod Coder Pack v9.18 deobfuscation configs are (c) Copyright by the MCP Team
- * 
- * EaglercraftX 1.8 patch files (c) 2022-2025 lax1dude, ayunami2000. All Rights Reserved.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES.
- */
 public class RenderChicken extends RenderLiving<EntityChicken> {
 
     private static final ResourceLocation CHICKEN_NORMAL =
@@ -47,20 +34,6 @@ public class RenderChicken extends RenderLiving<EntityChicken> {
     private static final ResourceLocation CHICKEN_STORMY =
             new ResourceLocation("textures/entity/chicken/stormy.png");
 
-    /**
-     * All chicken variants.
-     *
-     * 9 total textures:
-     * 0 = normal chicken
-     * 1 = amber
-     * 2 = bone
-     * 3 = bronzed
-     * 4 = duck
-     * 5 = gold crested
-     * 6 = midnight
-     * 7 = skewbald
-     * 8 = stormy
-     */
     private static final ResourceLocation[] CHICKEN_VARIANTS = {
         CHICKEN_NORMAL,
         CHICKEN_AMBER,
@@ -73,31 +46,38 @@ public class RenderChicken extends RenderLiving<EntityChicken> {
         CHICKEN_STORMY
     };
 
+    private static final int[] VARIANT_CHANCES = {
+        50,
+         2,
+         2,
+         5,
+         5,
+         5,
+         2,
+         4,
+        25
+    };
+
     public RenderChicken(RenderManager renderManagerIn, ModelBase modelBaseIn, float shadowSizeIn) {
         super(renderManagerIn, modelBaseIn, shadowSizeIn);
     }
 
-    /**+
-     * Returns the location of an entity's texture.
-     *
-     * Each chicken gets one of the 9 variants.
-     * The entity ID keeps the selected variant consistent
-     * so the texture does not flicker.
-     */
     @Override
     protected ResourceLocation getEntityTexture(EntityChicken entity) {
-        int id = entity.getEntityId();
+        long bits = entity.getUniqueID().getLeastSignificantBits();
+        int roll = Math.abs((int) (bits % 100));
 
-        // Prevent negative entity IDs from causing an invalid array index
-        int variant = Math.abs(id) % CHICKEN_VARIANTS.length;
+        int cumulative = 0;
+        for (int i = 0; i < CHICKEN_VARIANTS.length; i++) {
+            cumulative += VARIANT_CHANCES[i];
+            if (roll < cumulative) {
+                return CHICKEN_VARIANTS[i];
+            }
+        }
 
-        return CHICKEN_VARIANTS[variant];
+        return CHICKEN_NORMAL;
     }
 
-    /**+
-     * Defines what float the third param in setRotationAngles of
-     * ModelBase is.
-     */
     @Override
     protected float handleRotationFloat(EntityChicken livingBase, float partialTicks) {
         float f = livingBase.field_70888_h

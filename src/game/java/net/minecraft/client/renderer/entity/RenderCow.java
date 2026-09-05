@@ -34,12 +34,6 @@ public class RenderCow extends RenderLiving<EntityCow> {
     private static final ResourceLocation COW_PINTO =
             new ResourceLocation("textures/entity/cow/pinto.png");
 
-    private static final ResourceLocation COW_DAIRY =
-            new ResourceLocation("textures/entity/cow/dairy.png");
-
-    private static final ResourceLocation COW_CREAM =
-            new ResourceLocation("textures/entity/cow/cream.png");
-
     private static final ResourceLocation COW_COOKIE =
             new ResourceLocation("textures/entity/cow/cookie.png");
 
@@ -58,8 +52,6 @@ public class RenderCow extends RenderLiving<EntityCow> {
      * 2 = umbra
      * 3 = sunset
      * 4 = pinto
-     * 5 = dairy
-     * 6 = cream
      * 7 = cookie
      * 8 = ashen
      * 9 = albino
@@ -70,8 +62,6 @@ public class RenderCow extends RenderLiving<EntityCow> {
         COW_UMBRA,
         COW_SUNSET,
         COW_PINTO,
-        COW_DAIRY,
-        COW_CREAM,
         COW_COOKIE,
         COW_ASHEN,
         COW_ALBINO

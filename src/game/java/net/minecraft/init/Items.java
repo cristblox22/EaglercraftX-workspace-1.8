@@ -256,6 +256,10 @@ public class Items {
 	public static Item gothic_chestplate;
 	public static Item gothic_leggings;
 	public static Item gothic_boots;
+	public static Item bear_fur;
+	public static Item crocodile_scute;
+	public static Item raccoon_tail;
+
 
 	private static Item getRegisteredItem(String name) {
 		return (Item) Item.itemRegistry.getObject(new ResourceLocation(name));
@@ -491,6 +495,10 @@ public class Items {
 			gothic_chestplate = getRegisteredItem("gothic_chestplate");
 			gothic_leggings = getRegisteredItem("gothic_leggings");
 			gothic_boots = getRegisteredItem("gothic_boots");
+			bear_fur = getRegisteredItem("bear_fur");
+			crocodile_scute = getRegisteredItem("crocodile_scute");
+			raccoon_tail = getRegisteredItem("raccoon_tail");
+
 
 
 

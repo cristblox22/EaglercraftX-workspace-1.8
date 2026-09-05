@@ -107,7 +107,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
+import net.minecraft.client.model.ModelGrizzlyBear;
+import net.minecraft.entity.passive.EntityGrizzlyBear;
+import net.minecraft.client.model.ModelCrocodile;
+import net.minecraft.entity.passive.EntityCrocodile;
+import net.minecraft.entity.passive.EntityCrow;
+import net.minecraft.client.model.ModelCrow;
+import net.minecraft.entity.passive.EntityRaccoon;
+import net.minecraft.client.model.ModelRaccoon;
+import net.minecraft.entity.passive.EntityTasmanianDevil;
+import net.minecraft.client.model.ModelTasmanianDevil;
 /**+
  * This portion of EaglercraftX contains deobfuscated Minecraft 1.8 source code.
  * 
@@ -216,6 +225,14 @@ public class RenderManager {
 		this.entityRenderMap.put(EntityFishHook.class, new RenderFish(this));
 		this.entityRenderMap.put(EntityHorse.class, new RenderHorse(this, new ModelHorse(), 0.75F));
 		this.entityRenderMap.put(EntityLightningBolt.class, new RenderLightningBolt(this));
+		this.entityRenderMap.put(EntityGrizzlyBear.class, new RenderGrizzlyBear(this));
+		this.entityRenderMap.put(EntityRaccoon.class, new RenderRaccoon(this));
+		this.entityRenderMap.put(EntityCrow.class, new RenderCrow(this));
+		this.entityRenderMap.put(EntityTasmanianDevil.class, new RenderTasmanianDevil(this));
+		this.entityRenderMap.put(EntityCrocodile.class, new RenderCrocodile(this, new ModelCrocodile(), 0.5F));
+
+
+		
 		this.playerRenderer = new RenderPlayer(this);
 		this.skinMap.put("default", this.playerRenderer);
 		this.skinMap.put("slim", new RenderPlayer(this, true, false));
